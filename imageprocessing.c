@@ -77,7 +77,8 @@ int ***crop(int ***image, int N, int M, int x, int y, int h, int w) {
 	for (int i = 0; i < h; i++) {
 		for (int j = 0; j < w; j++) {
 			for (int k = 0; k < COLOR_RANGE; k++) {
-				m[i][j][k] = image[y+i][x+j][k];
+				if (((y+i) < N) && ((x+j) < M))
+					m[i][j][k] = image[y+i][x+j][k];
 			}
 		}
 	}
