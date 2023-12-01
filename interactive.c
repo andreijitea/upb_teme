@@ -72,6 +72,25 @@ void save(int index, imagine imagini[], int N, int M, char *path) {
     write_to_bmp(imagini[index].matrice, N, M, path);
 }
 
+void delete_all(imagine imagini[], int i_img, filtru filtre[], int i_fil) {
+    for (int index = 0; index < i_img; index++) {
+        for (int i = 0; i < imagini[index].N; i++) {
+            for (int j = 0; j < imagini[index].M; j++) {
+                free(imagini[index].matrice[i][j]);
+            }
+		    free(imagini[index].matrice[i]);
+        }
+	    free(imagini[index].matrice);
+    }
+
+    for (int index = 0; index < i_fil; index++) {
+        for (int i = 0; i < filtre[index].size; i++) {
+		    free(filtre[index].matrice[i]);
+        }
+	    free(filtre[index].matrice);
+    }
+}
+
 int main()
 {
     int i_img = 0, i_fil = 0;
@@ -164,7 +183,7 @@ int main()
     } while (strcmp(comanda, "e") != 0);
 
     
-
+    delete_all(imagini, i_img, filtre, i_fil);
 	
 	
     return 0;
