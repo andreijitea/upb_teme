@@ -69,9 +69,13 @@ TDate convertUnixTimestampToDate(unsigned int timestamp) {
 	return result;
 }
 
-// TODO Task 4
+
 TDateTimeTZ convertUnixTimestampToDateTimeTZ(unsigned int timestamp, TTimezone *timezones, int timezone_index) {
 	TDateTimeTZ result;
+	timestamp += timezones[timezone_index].utc_hour_difference * 3600;
+	result.date = convertUnixTimestampToTime(timestamp);
+	result.time = convertUnixTimestampToDate(timestamp);
+	result.tz = timezones[timezone_index];
 	return result;
 }
 
