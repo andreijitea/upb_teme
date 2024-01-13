@@ -28,7 +28,9 @@ TTime convertUnixTimestampToTime(unsigned int timestamp);
 TDate convertUnixTimestampToDateWithoutLeapYears(unsigned int timestamp);
 TDate convertUnixTimestampToDate(unsigned int timestamp);
 TDateTimeTZ convertUnixTimestampToDateTimeTZ(unsigned int timestamp, TTimezone *timezones, int timezone_index);
-unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ);
+unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz);
 void printDateTimeTZ(TDateTimeTZ datetimetz);
+
+int isLeapYear(int year);
 
 #endif  // TIMELIB_H_INCLUDED
