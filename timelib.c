@@ -84,7 +84,7 @@ TDateTimeTZ convertUnixTimestampToDateTimeTZ(unsigned int timestamp, TTimezone *
 	return result;
 }
 
-// TODO Task 5
+
 unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz) {
 	char days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	unsigned int timestamp = 0;
