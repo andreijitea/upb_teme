@@ -13,7 +13,7 @@ int cmp(const void *a, const void *b) {
 
 int main()
 {
-    int nr_task, N, M = 0;
+    int nr_task, N, M = -1;
     char months[12][20] = {"ianuarie", "februarie", "martie",
                                 "aprilie", "mai", "iunie",
                                 "iulie", "august", "septembrie",
@@ -29,13 +29,14 @@ int main()
             scanf("%d", &nums[i]);
 
     } else if (nr_task == 8) {
-        char digit_num = 0, pos_num = 0, b1 = 0;
-        int bi = 0;
+        char digit_num = 0, pos_num = 0;
         int packets_size = (N * DATE_SIZE + UINT_SIZE - 1) / UINT_SIZE;
-        int bits_size = (N + UINT_SIZE - 1) / UINT_SIZE;
+        int bits_size = (packets_size + UINT_SIZE - 1) / UINT_SIZE;
         unsigned int *packets = calloc(packets_size, sizeof(unsigned int));
         unsigned int *bits = calloc(bits_size, sizeof(unsigned int));
-        char *control_bits = calloc(N, sizeof(char));
+        char *control_bits = calloc(packets_size, sizeof(char));
+        char *skip = calloc(packets_size, sizeof(char));
+        int *all_nums = calloc(N, sizeof(int));
 
         for (int i = 0; i < packets_size; i++) {
             scanf("%d", &packets[i]);
@@ -44,43 +45,56 @@ int main()
             scanf("%d", &bits[i]);
         }
 
-        for (int i = 0, bi = -1; i < N; i++) {
-            if (i % UINT_SIZE == 0)
+        for (int i = 0, bi = 0; i < packets_size; i++) {
+            if (i % UINT_SIZE == 0 && i != 0)
                 bi++;
             control_bits[i] = (bits[bi] & (1 << (i % UINT_SIZE))) >> (i % UINT_SIZE);
         }
-
-        for (int i = 0, pi = 0, ni = 0; i < N * DATE_SIZE; i++) {
-            if (i % UINT_SIZE == 0 && i != 0)
+        int i = 0, pi = 0, ni = 0, b1 = 0;
+        for (; i < N * DATE_SIZE; i++) {
+            if (i % UINT_SIZE == 0 && i != 0) {
+                if (b1 % 2 != control_bits[pi]) {
+                    skip[pi] = 1;
+                }
                 pi++;
-            if (i % DATE_SIZE == 0 && i != 0) {
-                printf("%d %d %d\n", nums[ni], b1%2, control_bits[bi]);
-                if (b1 % 2 == control_bits[bi]) {
-                    M++;
-                    ni++;
-                }
-                else {
-                    nums[ni] = 0;
-                }
-                bi++;
-                pos_num = 0;
                 b1 = 0;
             }
+            if (i % DATE_SIZE == 0 && i != 0) {
+                ni++;
+                pos_num = 0;
+            }
             digit_num = (packets[pi] & (1 << (i % UINT_SIZE))) >> (i % UINT_SIZE);
-            nums[ni] += digit_num << pos_num;
+            all_nums[ni] += digit_num << pos_num;
+            pos_num++;
             if (digit_num)
                 b1++;
-            pos_num++;
         }
-        if (b1 % 2 == control_bits[bi]) {
+        M = 0;
+        for (int j = 0; j < packets_size; j++) {
+
+            if (skip[j] == 1) {
+                all_nums[2*j] = -1;
+                all_nums[2*j+1] = -1;
+                all_nums[2*j+2] = -1;
+            }
+        }
+        M = 0;
+        for (int j = 0; j < N; j++) {
+            if (all_nums[j] == -1) {
+                continue;
+            }
+            nums[M] = all_nums[j];
             M++;
         }
 
         free(packets);
         free(bits);
         free(control_bits);
+        free(skip);
+        free(all_nums);
     }
-    N=M;
+    if (M != -1)
+        N = M;
     qsort(nums, N, sizeof(unsigned int), cmp);
     for (int i = 0; i < N; i++) {
         dates[i].date.day = nums[i] & MASK_DAY;
