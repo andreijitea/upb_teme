@@ -36,7 +36,7 @@ int main()
         unsigned int *bits = calloc(bits_size, sizeof(unsigned int));
         char *control_bits = calloc(packets_size, sizeof(char));
         char *skip = calloc(packets_size, sizeof(char));
-        int *all_nums = calloc(N, sizeof(int));
+        int *all_nums = calloc(2*N, sizeof(int));
 
         for (int i = 0; i < packets_size; i++) {
             scanf("%d", &packets[i]);
@@ -50,9 +50,11 @@ int main()
                 bi++;
             control_bits[i] = (bits[bi] & (1 << (i % UINT_SIZE))) >> (i % UINT_SIZE);
         }
+        //printf("N %d ps %d\n", N, packets_size);
         int i = 0, pi = 0, ni = 0, b1 = 0;
-        for (; i < N * DATE_SIZE; i++) {
+        for (; i <= packets_size * UINT_SIZE && pi < packets_size; i++) {
             if (i % UINT_SIZE == 0 && i != 0) {
+                //printf("%u %d %d\n", packets[pi], b1, control_bits[pi]);
                 if (b1 % 2 != control_bits[pi]) {
                     skip[pi] = 1;
                 }
@@ -64,22 +66,35 @@ int main()
                 pos_num = 0;
             }
             digit_num = (packets[pi] & (1 << (i % UINT_SIZE))) >> (i % UINT_SIZE);
+            if (ni < N) {
             all_nums[ni] += digit_num << pos_num;
             pos_num++;
+            }
+            //printf("digit %d i %d\n", digit_num, i);
             if (digit_num)
                 b1++;
         }
-        M = 0;
-        for (int j = 0; j < packets_size; j++) {
-
+        //printf("last %u %d %d\n", packets[pi], b1, control_bits[pi]);
+    
+        for (int j = 0, k = 0; j < packets_size; j++) {
+            //printf("skip %d\n", skip[j]);
+            if (j < 8)
+                k = 2*j;
+            else
+                k = 2*j +1;
             if (skip[j] == 1) {
-                all_nums[2*j] = -1;
-                all_nums[2*j+1] = -1;
-                all_nums[2*j+2] = -1;
+                if (j % 7 == 0 && j % 2 == 1) {
+                    all_nums[k+3] = -1;
+                }
+                all_nums[k] = -1;
+                all_nums[k+1] = -1;
+                all_nums[k+2] = -1;
+                
             }
         }
         M = 0;
         for (int j = 0; j < N; j++) {
+            //printf("all %d\n", all_nums[j]);
             if (all_nums[j] == -1) {
                 continue;
             }
@@ -93,6 +108,7 @@ int main()
         free(skip);
         free(all_nums);
     }
+
     if (M != -1)
         N = M;
     qsort(nums, N, sizeof(unsigned int), cmp);
