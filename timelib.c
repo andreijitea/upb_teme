@@ -50,11 +50,8 @@ TDate convertUnixTimestampToDate(unsigned int timestamp) {
 	char days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 	for (; result.month <= 12; result.month++) {
-		if (result.month == 2) {
-			if (isLeapYear(result.year))
+		if (result.month == 2 && isLeapYear(result.year)) {
 				total_days -= 29;
-			else
-				total_days -= 28;
 		} else {
 			total_days -= days_in_month[result.month];
 			if (total_days < 0)
@@ -111,7 +108,7 @@ unsigned int convertDateTimeTZToUnixTimestamp(TDateTimeTZ datetimetz) {
 
 void printDateTimeTZ(TDateTimeTZ datetimetz) {
 	char months[12][20] = {"ianuarie", "februarie", "martie", "aprilie", "mai", "iunie", "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie"};
-	printf("%d %s %d, %d:%d:%d %s (UTC%+d)\n", datetimetz.date.day,
+	printf("%02d %s %d, %02d:%02d:%02d %s (UTC%+d)\n", datetimetz.date.day,
 											months[datetimetz.date.month-1],
 											datetimetz.date.year,
 											datetimetz.time.hour,
