@@ -14,16 +14,13 @@ int main() {
 
     T_List *train = initList();
 
-    printList(train);
-    insertCellRight(train, 'a');
-    printList(train);
-    writeToCellVIP(train, 'x');
-    printList(train);
-    insertCellLeft(train, 'm');
-    printList(train);
+
+    printfList(train);
+    insertCellLeft(train, out_file, 'm');
+    printfList(train);
 
 
-    deleteList(train);
+    freeList(train);
 
     fclose(in_file);
     fclose(out_file);

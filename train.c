@@ -33,6 +33,52 @@ T_Cell *createCell() {
     return aux;
 }
 
+T_List *clearAllCells(T_List *list) {
+    freeList(list);
+    T_List *new_list = initList();
+    return new_list;
+}
+
+void clearVipCell(T_List *list) {
+    // Decrement the length of the list by one
+    list->length--;
+    // Reset the list if it has only one cell
+    if (list->length == 1) {
+        list = initList();
+        return;
+    }
+    // Remake connections between cells
+    T_Cell *aux = list->vip;
+    aux->prev->next = aux->next;
+    aux->next->prev = aux->prev;
+
+    // Move the VIP to the left
+    moveVipLeft(list);
+
+    // Free the cleared cell
+    free(aux);
+    return;
+}
+
+void moveVipRight(T_List *list) {
+    // If the VIP is at the end of the list, insert a new cell to the right
+    if (list->vip->next == list->head) {
+        insertCellRight(list, '#');
+        return;
+    }
+    // Move the VIP to the right one cell
+    list->vip = list->vip->next;
+    return;
+}
+void moveVipLeft(T_List *list) {
+    // If the VIP is at the first "real" cell, go to the end
+    if (list->vip->prev == list->head) {
+        list->vip = list->head->prev;
+        return;
+    }
+    // Move the VIP to the left one cell
+    list->vip = list->vip->prev;
+}
 void insertCellRight(T_List *list, char info) {
     // Increment the list length
     list->length++;
@@ -49,7 +95,14 @@ void insertCellRight(T_List *list, char info) {
     return;
 }
 
-void insertCellLeft(T_List *list, char info) {
+void insertCellLeft(T_List *list, FILE *file, char info) {
+    // Check if VIP is on the first cell
+    if (list->vip->prev == list->head) {
+        // Delete printf when done
+        printf("ERROR\n");
+        fprintf(file, "ERROR\n");
+        return;
+    }
     // Increment the list length
     list->length++;
     // Create the new cell and set its value
@@ -65,12 +118,12 @@ void insertCellLeft(T_List *list, char info) {
     return;
 }
 
-void writeToCellVIP(T_List *list, char info) {
+void writeToVipCell(T_List *list, char info) {
     list->vip->info = info;
     return;
 }
 
-void fprintList(T_List *list, FILE *file) {
+void fprintfList(T_List *list, FILE *file) {
     // Set a pointer to the first "real" cell (primul vagon)
     T_Cell *crt = list->head->next;
     for (int i = 1; i < list->length; i++) {
@@ -84,16 +137,35 @@ void fprintList(T_List *list, FILE *file) {
 
         crt = crt->next;
     }
+    fprintf(file, "\n");
     return;
 }
 
-void fprintListVIP(T_List *list, FILE *file) {
-    fprintf(file, "%c", list->vip->info);
+void fprintfVipCell(T_List *list, FILE *file) {
+    fprintf(file, "%c\n", list->vip->info);
+    return;
+}
+
+void freeList(T_List *list) {
+    // Set a pointer to the head of the list (locomotiva)
+    T_Cell *crt = list->head;
+    // Break connections between the head and last cell, resulting a linear doubly linked list
+    list->head->prev->next = NULL;
+    list->head->prev = NULL;
+
+    // Delete every cell one by one
+    while (crt != NULL) {
+        T_Cell *aux = crt;
+        crt = crt->next;
+        free(aux);
+    }
+    // Delete the list structure
+    free(list);
     return;
 }
 
 // Only for debugging purposes... Delete at the end!
-void printList(T_List *list) {
+void printfList(T_List *list) {
     // Set a pointer to the first "real" cell (primul vagon)
     T_Cell *crt = list->head->next;
     for (int i = 1; i < list->length; i++) {
@@ -111,20 +183,3 @@ void printList(T_List *list) {
     return;
 }
 
-void deleteList(T_List *list) {
-    // Set a pointer to the head of the list (locomotiva)
-    T_Cell *crt = list->head;
-    // Break connections between the head and last cell, resulting a linear doubly linked list
-    list->head->prev->next = NULL;
-    list->head->prev = NULL;
-
-    // Delete every cell one by one
-    while (crt != NULL) {
-        T_Cell *aux = crt;
-        crt = crt->next;
-        free(aux);
-    }
-    // Delete the list structure
-    free(list);
-    return;
-}
