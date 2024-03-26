@@ -1,5 +1,3 @@
 *.o
-*.out
 .idea/
-
-tema1.*
+tema1*
