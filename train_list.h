@@ -1,5 +1,5 @@
-#ifndef SDA_TEMA1_TRAIN_H
-#define SDA_TEMA1_TRAIN_H
+#ifndef SDA_TEMA1_TRAIN_LIST_H
+#define SDA_TEMA1_TRAIN_LIST_H
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -39,4 +39,4 @@ void searchRight(T_List *list, char* word, FILE *file);
 
 void printfList(T_List *list);
 
-#endif //SDA_TEMA1_TRAIN_H
+#endif //SDA_TEMA1_TRAIN_LIST_H

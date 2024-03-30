@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "train.h"
+#include "train_list.h"
+#include "command_queue.h"
 
 
 int main() {
@@ -14,7 +15,7 @@ int main() {
     T_List *train = initList();
 
 
-    
+
     printfList(train);
 
 
