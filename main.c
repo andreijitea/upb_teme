@@ -12,14 +12,16 @@ int main() {
         return -1;
     }
 
-    T_List *train = initList();
+    T_Queue *comenzi = initQueue();
+    pushQCell(comenzi, 1, "test");
+    pushQCell(comenzi, 2, "abc");
+    popQCell(comenzi);
+    popQCell(comenzi);
+    printfQueue(comenzi);
+    reverseQueue(comenzi);
+    printfQueue(comenzi);
 
-
-
-    printfList(train);
-
-
-    freeList(train);
+    freeQueue(comenzi);
     fclose(in_file);
     fclose(out_file);
     return 0;

@@ -1,17 +1,15 @@
 #include "train_list.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+
 
 // Initializeaza o lista
 T_List *initList() {
     T_List *list = malloc(sizeof(T_List));
     // Initializeaza santinela listei
-    list->head = (T_Cell*) malloc(sizeof(T_Cell));
+    list->head = (T_LCell*) malloc(sizeof(T_LCell));
     if (list->head == NULL)
         return NULL;
     // Initializeaza celula listei
-    T_Cell *aux = createCell();
+    T_LCell *aux = createLCell();
     if (aux == NULL)
         return NULL;
     // Conecteaza santinela cu celula listei
@@ -28,8 +26,8 @@ T_List *initList() {
 }
 
 // Initializeaza o celula noua
-T_Cell *createCell() {
-    T_Cell *aux = (T_Cell*) malloc(sizeof(T_Cell));
+T_LCell *createLCell() {
+    T_LCell *aux = (T_LCell*) malloc(sizeof(T_LCell));
     aux->info = '#';
     aux->next = NULL;
     aux->prev = NULL;
@@ -37,14 +35,14 @@ T_Cell *createCell() {
 }
 
 // Sterge toate celulele listei (reinitializeaza lista)
-T_List *clearAllCells(T_List *list) {
+T_List *clearAllLCells(T_List *list) {
     freeList(list);
     T_List *new_list = initList();
     return new_list;
 }
 
 // Sterge celula VIP-ului
-T_List *clearVipCell(T_List *list) {
+T_List *clearVipLCell(T_List *list) {
     // Scade lungimea listei
     list->length--;
     // In cazul in care lista avea 1 element, o reseteaza
@@ -55,7 +53,7 @@ T_List *clearVipCell(T_List *list) {
         return new_list;
     }
     // Reface legaturile dintre celulele vecine
-    T_Cell *aux = list->vip;
+    T_LCell *aux = list->vip;
     aux->prev->next = aux->next;
     aux->next->prev = aux->prev;
 
@@ -71,7 +69,7 @@ T_List *clearVipCell(T_List *list) {
 void moveVipRight(T_List *list) {
     // In cazul in care VIP-ul este capatul listei, insereaza o noua celula
     if (list->vip->next == list->head) {
-        insertCellRight(list, '#');
+        insertLCellRight(list, '#');
         return;
     }
     // Muta VIP-ul o celula la dreapta
@@ -92,11 +90,11 @@ void moveVipLeft(T_List *list) {
 }
 
 // Insereaza o celula la dreapta VIP-ului
-void insertCellRight(T_List *list, char info) {
+void insertLCellRight(T_List *list, char info) {
     // Incrementeaza lungimea listei
     list->length++;
     // Initializeaza o noua celula
-    T_Cell *aux = createCell();
+    T_LCell *aux = createLCell();
     aux->info = info;
     // Conecteaza noua celula cu celulele vecine din lista
     list->vip->next = aux;
@@ -109,7 +107,7 @@ void insertCellRight(T_List *list, char info) {
 }
 
 // Insereaza o celula la stanga VIP-ului
-void insertCellLeft(T_List *list, char info, FILE *file) {
+void insertLCellLeft(T_List *list, char info, FILE *file) {
     // Verifica daca VIP-ul este prima celula
     if (list->vip->prev == list->head) {
         // Delete printf when done
@@ -120,7 +118,7 @@ void insertCellLeft(T_List *list, char info, FILE *file) {
     // Incrementeaza lungimea listei
     list->length++;
     // Initializeaza o noua celula
-    T_Cell *aux = createCell();
+    T_LCell *aux = createLCell();
     aux->info = info;
     // Conecteaza noua celula cu celulele vecine din lista
     list->vip->prev->next = aux;
@@ -133,14 +131,14 @@ void insertCellLeft(T_List *list, char info, FILE *file) {
 }
 
 // Schimba litera celulei VIP
-void writeToVipCell(T_List *list, char info) {
+void writeToVipLCell(T_List *list, char info) {
     list->vip->info = info;
     return;
 }
 
 // Afiseaza lista
 void fprintfList(T_List *list, FILE *file) {
-    T_Cell *crt = list->head->next;
+    T_LCell *crt = list->head->next;
     for (int i = 1; i < list->length; i++) {
         // Afiseaza restul celulelor
         if (crt != list->vip) {
@@ -156,7 +154,7 @@ void fprintfList(T_List *list, FILE *file) {
 }
 
 // Afiseaza continutul celulei de pe pozitia VIP
-void fprintfVipCell(T_List *list, FILE *file) {
+void fprintfVipLCell(T_List *list, FILE *file) {
     // Delete after done
     printf("%c\n", list->vip->info);
     fprintf(file, "%c\n", list->vip->info);
@@ -165,14 +163,14 @@ void fprintfVipCell(T_List *list, FILE *file) {
 
 // Sterge o lista
 void freeList(T_List *list) {
-    T_Cell *crt = list->head;
+    T_LCell *crt = list->head;
     // Deconecteaza primul element si ultimul element al listei => lista liniara
     list->head->prev->next = NULL;
     list->head->prev = NULL;
 
     // Sterge fiecare celula a listei
     while (crt != NULL) {
-        T_Cell *aux = crt;
+        T_LCell *aux = crt;
         crt = crt->next;
         free(aux);
     }
@@ -186,7 +184,7 @@ void search(T_List *list, char* word, FILE *file) {
     // Initializeaza un string care va contine literele din lista
     char *content = malloc((list->length - 1) * sizeof(char));
     // Parcurge lista de la pozitia VIP pana la (VIP - 1) si salveaza literele in string
-    T_Cell *crt = list->vip;
+    T_LCell *crt = list->vip;
     for (int i = 1; i < list->length; i++) {
         if (crt == list->head) {
             crt = list->head->next;
@@ -228,7 +226,7 @@ void searchLeft(T_List *list, char* word, FILE *file) {
     // Initializeaza un string care va contine literele din lista
     char *content = malloc((list->length - 1) * sizeof(char));
     // Parcurge lista de la prima celula pana la VIP si salveaza literele in string
-    T_Cell *crt = list->head->next;
+    T_LCell *crt = list->head->next;
     int j = 0;
     while (crt != list->vip) {
         content[j] = crt->info;
@@ -265,7 +263,7 @@ void searchRight(T_List *list, char* word, FILE *file) {
     // Initializeaza un string care va contine literele din lista
     char *content = malloc((list->length - 1) * sizeof(char));
     // Parcurge lista de la VIP pana in capat si salveaza literele in string
-    T_Cell *crt = list->vip;
+    T_LCell *crt = list->vip;
     int j = 0;
     while (crt != list->head) {
         content[j] = crt->info;
@@ -303,7 +301,7 @@ void searchRight(T_List *list, char* word, FILE *file) {
 // Only for debugging purposes... Delete at the end!
 void printfList(T_List *list) {
     // Set a pointer to the first "real" cell (primul vagon)
-    T_Cell *crt = list->head->next;
+    T_LCell *crt = list->head->next;
     for (int i = 1; i < list->length; i++) {
         // Prints the cells the "vip" does not point to (vagoanele in care nu se afla mecanicul)
         if (crt != list->vip) {
