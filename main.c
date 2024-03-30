@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "train.h"
 
 
@@ -15,13 +14,11 @@ int main() {
     T_List *train = initList();
 
 
-    printfList(train);
-    insertCellLeft(train, out_file, 'm');
+    
     printfList(train);
 
 
     freeList(train);
-
     fclose(in_file);
     fclose(out_file);
     return 0;
