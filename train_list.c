@@ -140,17 +140,20 @@ void writeToVipLCell(T_List *list, char info) {
 void fprintfList(T_List *list, FILE *file) {
     T_LCell *crt = list->head->next;
     for (int i = 1; i < list->length; i++) {
-        // Afiseaza restul celulelor
+        // Afiseaza celulele in care nu se afla VIP-ul
         if (crt != list->vip) {
+            printf("%c", crt->info);
             fprintf(file, "%c", crt->info);
+            crt = crt->next;
             continue;
         }
-        // Afiseaza celula VIP
+        // Afiseaza celula in care se afla VIP-ul
+        printf("|%c|", crt->info);
         fprintf(file, "|%c|", crt->info);
         crt = crt->next;
     }
+    printf("\n");
     fprintf(file, "\n");
-    return;
 }
 
 // Afiseaza continutul celulei de pe pozitia VIP
@@ -225,16 +228,15 @@ void search(T_List *list, char* word, FILE *file) {
 void searchLeft(T_List *list, char* word, FILE *file) {
     // Initializeaza un string care va contine literele din lista
     char *content = malloc((list->length - 1) * sizeof(char));
-    // Parcurge lista de la prima celula pana la VIP si salveaza literele in string
-    T_LCell *crt = list->head->next;
+    // Parcurge lista de la VIP pana la prima celula si salveaza literele in string
+    T_LCell *crt = list->vip;
     int j = 0;
-    while (crt != list->vip) {
+    while (crt != list->head) {
         content[j] = crt->info;
-        crt = crt->next;
+        crt = crt->prev;
         j++;
     }
-    content[j] = list->vip->info;
-    content[j+1] = '\0';
+    content[j] = '\0';
     printf("content left: %s\n", content);
     // Cauta indexul primei aparitii a secventei cautate in lista
     char *result = strstr(content, word);
@@ -245,7 +247,7 @@ void searchLeft(T_List *list, char* word, FILE *file) {
         return;
     }
     // Calculeaza indexul ultimei litere din aparitie
-    int pos = result - content + strlen(word) - 1;
+    int pos = strlen(content) - (result - content) - strlen(word);
     printf("Gasit la index %d\n", pos);
     // Parcurge lista pana la indexul calculat
     crt = list->head->next;

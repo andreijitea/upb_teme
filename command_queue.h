@@ -3,6 +3,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#define MOVE_LEFT_ID 0
+#define MOVE_RIGHT_ID 1
+#define WRITE_ID 2
+#define CLEAR_CELL_ID 3
+#define CLEAR_ALL_ID 4
+#define INSERT_LEFT_ID 5
+#define INSERT_RIGHT_ID 6
+#define SEARCH_ID 7
+#define SEARCH_LEFT_ID 8
+#define SEARCH_RIGHT_ID 9
+
 
 typedef struct qcell {
     int command_id;

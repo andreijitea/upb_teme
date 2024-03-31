@@ -12,11 +12,15 @@ T_Queue *initQueue() {
 // Initializeaza o celula
 T_QCell *createQCell(int id, char *param) {
     T_QCell *aux = malloc(sizeof(T_QCell));
-    aux->param = malloc(strlen(param) * sizeof(char));
     aux->next = NULL;
     aux->prev = NULL;
     aux->command_id = id;
-    strcpy(aux->param, param);
+    if (param != NULL) {
+        aux->param = malloc(strlen(param) * sizeof(char));
+        strcpy(aux->param, param);
+        return aux;
+    }
+    aux->param = NULL;
     return aux;
 }
 
