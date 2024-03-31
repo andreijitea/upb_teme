@@ -47,7 +47,6 @@ T_List *clearVipLCell(T_List *list) {
     list->length--;
     // In cazul in care lista avea 1 element, o reseteaza
     if (list->length == 1) {
-        printf("reset\n");
         freeList(list);
         T_List *new_list = initList();
         return new_list;
@@ -110,8 +109,6 @@ void insertLCellRight(T_List *list, char info) {
 void insertLCellLeft(T_List *list, char info, FILE *file) {
     // Verifica daca VIP-ul este prima celula
     if (list->vip->prev == list->head) {
-        // Delete printf when done
-        printf("ERROR\n");
         fprintf(file, "ERROR\n");
         return;
     }
@@ -142,24 +139,19 @@ void fprintfList(T_List *list, FILE *file) {
     for (int i = 1; i < list->length; i++) {
         // Afiseaza celulele in care nu se afla VIP-ul
         if (crt != list->vip) {
-            printf("%c", crt->info);
             fprintf(file, "%c", crt->info);
             crt = crt->next;
             continue;
         }
         // Afiseaza celula in care se afla VIP-ul
-        printf("|%c|", crt->info);
         fprintf(file, "|%c|", crt->info);
         crt = crt->next;
     }
-    printf("\n");
     fprintf(file, "\n");
 }
 
 // Afiseaza continutul celulei de pe pozitia VIP
 void fprintfVipLCell(T_List *list, FILE *file) {
-    // Delete after done
-    printf("%c\n", list->vip->info);
     fprintf(file, "%c\n", list->vip->info);
     return;
 }
@@ -195,18 +187,15 @@ void search(T_List *list, char* word, FILE *file) {
         content[i-1] = crt->info;
         crt = crt->next;
     }
-    //printf("content %s\n", content);
     // Cauta indexul primei aparitii a secventei cautate in lista
     char *result = strstr(content, word);
     if (result == NULL) {
-        printf("ERROR\n");
         fprintf(file, "ERROR\n");
         free(content);
         return;
     }
     // Calculeaza indexul primei litere din aparitie
     int pos = result - content;
-    //printf("Gasit la index %d\n", pos);
     // Parcurge lista pana la indexul calculat
     crt = list->vip;
     for (int i = 0; i < pos; i++) {
@@ -237,18 +226,15 @@ void searchLeft(T_List *list, char* word, FILE *file) {
         j++;
     }
     content[j] = '\0';
-    printf("content left: %s\n", content);
     // Cauta indexul primei aparitii a secventei cautate in lista
     char *result = strstr(content, word);
     if (result == NULL) {
-        printf("ERROR\n");
         fprintf(file, "ERROR\n");
         free(content);
         return;
     }
     // Calculeaza indexul ultimei litere din aparitie
     int pos = strlen(content) - (result - content) - strlen(word);
-    printf("Gasit la index %d\n", pos);
     // Parcurge lista pana la indexul calculat
     crt = list->head->next;
     for (int i = 0; i < pos; i++) {
@@ -273,18 +259,15 @@ void searchRight(T_List *list, char* word, FILE *file) {
         j++;
     }
     content[j] = '\0';
-    printf("content right: %s\n", content);
     // Cauta indexul primei aparitii a secventei cautate in lista
     char *result = strstr(content, word);
     if (result == NULL) {
-        printf("ERROR\n");
         fprintf(file, "ERROR\n");
         free(content);
         return;
     }
     // Calculeaza indexul ultimei litere din aparitie
     int pos = result - content + strlen(word) - 1;
-    printf("Gasit la index %d\n", pos);
     // Parcurge lista pana la indexul calculat
     crt = list->head->next;
     for (int i = 0; i < pos; i++) {
@@ -300,7 +283,7 @@ void searchRight(T_List *list, char* word, FILE *file) {
 
 
 
-// Only for debugging purposes... Delete at the end!
+// FUNCTIE FOLOSITA IN DEBUGGING
 void printfList(T_List *list) {
     // Set a pointer to the first "real" cell (primul vagon)
     T_LCell *crt = list->head->next;

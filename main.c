@@ -25,7 +25,6 @@ int main() {
         line[strcspn(line, "\n")] = '\0';
         char *tok = strtok(line, " ");
         // Primul TOK este mereu comanda, urmatorul TOK este parametrul, daca exista
-        printf("c: %s\n", tok);
         if (strcmp(tok, "EXECUTE") == 0) {
             switch (commands->head->command_id) {
                 case MOVE_LEFT_ID:
@@ -93,15 +92,13 @@ int main() {
             tok = strtok(NULL, " ");
             pushQCell(commands, SEARCH_RIGHT_ID, tok);
         }
-        printfQueue(commands);
-        printfList(train);
-        printf("\n");
     }
 
-
+    // Sterge lista si coada
     freeQueue(commands);
     freeList(train);
 
+    // Inchide fisierele
     fclose(in_file);
     fclose(out_file);
     return 0;

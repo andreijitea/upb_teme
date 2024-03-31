@@ -71,9 +71,15 @@ void reverseQueue(T_Queue *queue) {
 
     // Copiaza 'command_id' si 'param' ale celulei din capul cozii
     int command_id;
-    char *param = malloc(strlen(queue->head->param) * sizeof(char));
+    char *param;
     command_id = queue->head->command_id;
-    strcpy(param, queue->head->param);
+    // In cazul in care parametrul comenzii nu exista
+    if (queue->head->param != NULL) {
+        param = malloc(strlen(queue->head->param) * sizeof(char));
+        strcpy(param, queue->head->param);
+    } else {
+        param = NULL;
+    }
 
     // Elimina celula din capul cozii
     popQCell(queue);
@@ -84,7 +90,9 @@ void reverseQueue(T_Queue *queue) {
     pushQCell(queue, command_id, param);
 
     // Sterge stringul folosit intermediar inversarii cozii
-    free(param);
+    if (queue->head->param != NULL) {
+        free(param);
+    }
     return;
 }
 
@@ -108,6 +116,7 @@ void freeQueue(T_Queue *queue) {
     return;
 }
 
+// FUNCTIE FOLOSITA IN DEBUGGING
 void printfQueue(T_Queue *queue) {
     if (queue->length == 0) {
         printf("Coada goala\n");
