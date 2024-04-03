@@ -6,8 +6,23 @@
 #include <stdio.h>
 
 array_t reverse(array_t list) {
-	(void)list;
-	return (array_t){0};
+    // Initializeaza o noua lista
+    array_t new_list;
+    new_list.destructor = list.destructor;
+    new_list.elem_size = list.elem_size;
+    new_list.len = list.len;
+    new_list.data = malloc(new_list.elem_size * new_list.len);
+
+    // Inverseaza elementele listei vechi si le introduce in lista noua
+    void *new_p = new_list.data, *old_p = list.data;
+    old_p = (char *)old_p + (list.len - 1) * list.elem_size;
+    for (int i = 0; i < list.len; i++) {
+        memcpy(new_p, old_p, list.elem_size);
+        new_p = (char *)new_p + list.elem_size;
+        old_p = (char *)old_p - list.elem_size;
+    }
+
+    return new_list;
 }
 
 array_t create_number_array(array_t integer_part, array_t fractional_part) {
