@@ -1,3 +1,5 @@
+/* JITEA Andrei-Petru - 315CB */
+
 #ifndef SDA_TEMA1_COMMAND_QUEUE_H
 #define SDA_TEMA1_COMMAND_QUEUE_H
 #include <stdlib.h>
@@ -16,14 +18,14 @@
 
 
 typedef struct qcell {
-    int command_id;
-    char *param;
-    struct qcell *prev, *next;
+	int command_id;
+	char *param;
+	struct qcell *prev, *next;
 } T_QCell;
 
 typedef struct {
-    T_QCell *head, *tail;
-    int length;
+	T_QCell *head, *tail;
+	int length;
 } T_Queue;
 
 T_Queue *initQueue();

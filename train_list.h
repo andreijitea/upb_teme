@@ -1,3 +1,5 @@
+/* JITEA Andrei-Petru - 315CB */
+
 #ifndef SDA_TEMA1_TRAIN_LIST_H
 #define SDA_TEMA1_TRAIN_LIST_H
 #include <stdlib.h>
@@ -5,13 +7,13 @@
 #include <string.h>
 
 typedef struct lcell {
-    char info;
-    struct lcell *prev, *next;
+	char info;
+	struct lcell *prev, *next;
 } T_LCell;
 
 typedef struct {
-    T_LCell *head, *vip;
-    int length;
+	T_LCell *head, *vip;
+	int length;
 } T_List;
 
 T_List *initList();
