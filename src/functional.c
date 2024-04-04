@@ -62,13 +62,16 @@ array_t filter(boolean(*func)(void *), array_t list)
 	new_list.data = malloc(new_list.len * new_list.elem_size);
 	/*
 	 * Copiaza elementele, care indeplinesc conditia
-	 * functiei date, in noua lista
+	 * functiei date, in noua lista si elimina elemente
 	 */
 	void *new_p = new_list.data, *old_p = list.data;
 	for (int i = 0; i < list.len; i++) {
 		if (func(old_p)) {
 			memcpy(new_p, old_p, new_list.elem_size);
 			new_p = (char *)new_p + new_list.elem_size;
+		} else {
+			if (list.destructor)
+				list.destructor(old_p);
 		}
 		old_p = (char *)old_p + list.elem_size;
 	}
