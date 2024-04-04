@@ -25,10 +25,22 @@ array_t reverse(array_t list) {
     return new_list;
 }
 
+// Produce un element al listei de numere
+void create_number(void *new_p, void **elem) {
+    ((number_t *)new_p)->integer_part = *(int*)elem[0];
+    ((number_t *)new_p)->fractional_part = *(int*)(elem[0]+sizeof(int));
+    ((number_t *)new_p)->string = malloc(sizeof(char*));
+    sprintf(((number_t *)new_p)->string, "%d.%d", ((number_t *)new_p)->integer_part, ((number_t *)new_p)->fractional_part);
+}
+
+// Destructor pentru un element al listei
+void free_string(void *elem) {
+    free(((number_t*)elem)->string);
+}
+
 array_t create_number_array(array_t integer_part, array_t fractional_part) {
-	(void)integer_part;
-	(void)fractional_part;
-	return (array_t){0};
+    array_t new_list = map_multiple(create_number, sizeof(number_t), free_string, 2, integer_part, fractional_part);
+    return new_list;
 }
 
 array_t get_passing_students_names(array_t list) {
