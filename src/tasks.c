@@ -7,37 +7,35 @@
 
 // Genereaza o lista
 array_t generate_list(int len, int elem_size, void (*destructor)(void *)) {
-    array_t list;
-    list.elem_size = elem_size;
-    list.len = len;
-    list.destructor = destructor;
-    list.data = malloc(list.len * list.elem_size);
-    memset(list.data, 0, list.len * list.elem_size);
-    return list;
+	array_t list;
+	list.elem_size = elem_size;
+	list.len = len;
+	list.destructor = destructor;
+	list.data = malloc(list.len * list.elem_size);
+	memset(list.data, 0, list.len * list.elem_size);
+	return list;
 }
 
 // Schimba 2 elemente ale listei intre ele
 void switch_elem(void *elem) {
-    void *aux = malloc(sizeof(void*));
-    memset(aux, 0, sizeof(void*));
-    memcpy(aux, elem, sizeof(int));
-    memcpy(elem, elem+sizeof(int), sizeof(int));
-    memcpy(elem+sizeof(int), aux, sizeof(int));
-    free(aux);
+	void *aux = malloc(sizeof(void *));
+	memset(aux, 0, sizeof(void *));
+	memcpy(aux, elem, sizeof(int));
+	memcpy(elem, elem + sizeof(int), sizeof(int));
+	memcpy(elem + sizeof(int), aux, sizeof(int));
+	free(aux);
 }
-
-
 
 array_t reverse(array_t list) {
 	// Inverseaza in loc lista data
-    int len = list.len;
-    for (int i = 0; i < len; i++) {
-        list.len--;
-        for_each(switch_elem, list);
-    }
-    list.len = len;
-    array_t new_list = generate_list(list.len, list.elem_size, list.destructor);
-    memcpy(new_list.data, list.data, list.len * list.elem_size);
+	int len = list.len;
+	for (int i = 0; i < len; i++) {
+		list.len--;
+		for_each(switch_elem, list);
+	}
+	list.len = len;
+	array_t new_list = generate_list(list.len, list.elem_size, list.destructor);
+	memcpy(new_list.data, list.data, list.len * list.elem_size);
 
 	return new_list;
 }
@@ -125,24 +123,43 @@ array_t get_even_indexed_strings(array_t list) {
 	return new_list;
 }
 
-//void set_col(void *elem) {
-//    static void *p;
-//    if (!p)
-//        p = elem;
-//    elem = (elem-p)/sizeof(array_t) + 1;
-//    printf("%ld\n", (long)elem);
-//}
-//
+// Genereaza o lista pentru fiecare element al altei liste
+void apply_generator(void *elem) {
+	*(array_t *)elem = generate_list(1, sizeof(array_t), NULL);
+}
 
-//
-//void apply_generator(void *elem) {
-//    *(array_t*)elem = generate_list(0, sizeof(array_t), NULL);
-//}
-//
+// Destructor de lista
+void list_destructor(void *list) {
+	free(((array_t *)list)->data);
+}
+
+// Seteaza o coloana de numere din matrice
+void set_col(void *elem) {
+	static int i;
+	if (!elem) {
+		i = 0;
+		return;
+	}
+	if (!i)
+		i = *(int *)elem;
+	*(int *)elem = i++;
+}
+
+// Seteaza numerele matricei
+void set_nums(void *list) {
+	static int i = 1;
+	*(int *)((array_t *)list)->data = i;
+	for_each(set_col, *(array_t *)list);
+	set_col(NULL);
+	i++;
+}
+
 array_t generate_square_matrix(int n) {
-//    array_t new_list_list = generate_list(n, sizeof(array_t), NULL);
-//    for_each(apply_generator, new_list_list);
-//    for_each(set_col, new_list_list);
-//	return new_list_list;
-    return (array_t){0};
+	array_t new_list_list = generate_list(n, sizeof(array_t), list_destructor);
+	for (int i = 0; i < n; i++) {
+		*(array_t *)(new_list_list.data + i * sizeof(array_t)) =
+				generate_list(n, sizeof(array_t), NULL);
+	}
+	for_each(set_nums, new_list_list);
+	return new_list_list;
 }
