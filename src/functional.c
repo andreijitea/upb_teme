@@ -26,6 +26,7 @@ array_t map(void (*func)(void *, void *),
 	new_list.elem_size = new_list_elem_size;
 	new_list.destructor = new_list_destructor;
 	new_list.data = malloc(new_list.len * new_list.elem_size);
+	memset(new_list.data, 0, new_list.len * new_list.elem_size);
 	// Calculeaza elementele noii liste, conform functiei date
 	void *new_p = new_list.data, *old_p = list.data;
 	for (int i = 0; i < list.len; i++) {
@@ -175,6 +176,7 @@ array_t map_multiple(void (*func)(void *, void **),
 	new_list.destructor = new_list_destructor;
 	new_list.len = min_len;
 	new_list.data = malloc(new_list.len * new_list.elem_size);
+	memset(new_list.data, 0, new_list.len * new_list.elem_size);
 	void *new_p = new_list.data;
 	/*
 	 * Parcurge fiecare element al tuturor listelor, in paralel,

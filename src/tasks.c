@@ -65,10 +65,29 @@ array_t get_passing_students_names(array_t list) {
 	return new_list;
 }
 
+// Calculeaza suma unei liste
+void calc_sum(void *acc, void *elem) {
+	*(int *)acc += *(int *)elem;
+}
+
+// Initializeaza lista sumelor
+void create_sum_list(void *new_p, void *elem) {
+	array_t aux_list = *(array_t *)elem;
+
+	reduce(calc_sum, new_p, aux_list);
+}
+
+// Verifica daca suma este mai mare sau egala cu valoarea salvata
+void check_sum(void *new_p, void **elem) {
+	*(boolean *)new_p = (*(int *)((array_t *)elem)->data >=
+			*(int *)(((array_t *)elem)->data + sizeof(int))) ? 1 : 0;
+}
+
 array_t check_bigger_sum(array_t list_list, array_t int_list) {
-	(void)list_list;
-	(void)int_list;
-	return (array_t){0};
+	array_t sum_list = map(create_sum_list, sizeof(int), NULL, list_list);
+	array_t new_list = map_multiple(check_sum, sizeof(boolean),
+									NULL, 2, sum_list, int_list);
+	return new_list;
 }
 
 /*
