@@ -21,35 +21,34 @@ void list_destructor(void *list) {
     free(((array_t *)list)->data);
 }
 
+// Destructor de student
 void student_destructor(void *stud) {
     free(((student_t *)stud)->name);
 }
 
+// Destructor de string
 void string_destructor(void *elem) {
     free(*(char **)elem);
 }
 
-// Schimba 2 elemente ale listei intre ele
-void switch_elem(void *elem) {
-	void *aux = malloc(sizeof(void *));
-	memset(aux, 0, sizeof(void *));
-	memcpy(aux, elem, sizeof(int));
-	memcpy(elem, elem + sizeof(int), sizeof(int));
-	memcpy(elem + sizeof(int), aux, sizeof(int));
-	free(aux);
+// Inverseaza (n-1) numere din lista
+void inverse_num(void *old_p, void *elem) {
+    int pos = *(int*)elem - 1;
+    *((int*)elem + 1) = pos;
+    old_p = (int *)old_p + pos;
+    *(int*)elem = *(int*)old_p;
 }
 
-array_t reverse(array_t list) {
-	// Inverseaza in loc lista data
-	int len = list.len;
-	for (int i = 0; i < len; i++) {
-		list.len--;
-		for_each(switch_elem, list);
-	}
-	list.len = len;
-	array_t new_list = generate_list(list.len, list.elem_size, list.destructor);
-	memcpy(new_list.data, list.data, list.len * list.elem_size);
 
+
+array_t reverse(array_t list) {
+	array_t new_list = generate_list(list.len, list.elem_size, list.destructor);
+    *(int*)new_list.data = new_list.len;
+    new_list.len--;
+    reduce(inverse_num, list.data, new_list);
+    new_list.len++;
+    // Inverseaza numarul (n)
+    *((int*)new_list.data + new_list.len - 1) = *(int*)list.data;
 	return new_list;
 }
 
