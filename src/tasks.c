@@ -16,6 +16,19 @@ array_t generate_list(int len, int elem_size, void (*destructor)(void *)) {
 	return list;
 }
 
+// Destructor de lista
+void list_destructor(void *list) {
+    free(((array_t *)list)->data);
+}
+
+void student_destructor(void *stud) {
+    free(((student_t *)stud)->name);
+}
+
+void string_destructor(void *elem) {
+    free(*(char **)elem);
+}
+
 // Schimba 2 elemente ale listei intre ele
 void switch_elem(void *elem) {
 	void *aux = malloc(sizeof(void *));
@@ -105,21 +118,44 @@ array_t check_bigger_sum(array_t list_list, array_t int_list) {
 	return new_list;
 }
 
-/*
- * Retine adresa capului listei, calculeaza pozitia
- * elementului in raport cu adresa capului listei
- */
-boolean index_string(void *elem) {
-	static void *p;
-	if (!p)
-		p = elem;
-	if ((elem - p) / sizeof(student_t *) % 2 == 0)
-		return 1;
-	return 0;
+// Extrage numele din lista
+void get_name(void *new_p, void *elem) {
+    strcpy(new_p, ((student_t *)elem)->name);
+}
+
+// Alterneaza 0 si 1 in lista
+void set_parity(void *elem) {
+    if (*(int*)elem == 0)
+        *(int*)(elem+sizeof(int)) = 1;
+}
+
+// Verifica conditia cerintei
+boolean check_string(void *elem) {
+    if (**(char**)elem != 0)
+        return 1;
+    else
+        return 0;
+}
+
+// Seteaza numele intr-un element al listei
+void set_string(void *new_p, void **elem) {
+    char **s = (char **)new_p;
+    *s = malloc(100);
+    if (*(int*)elem[1] == 0)
+        strcpy(*s, *(char **)elem[0]);
+    else
+        memset(*s, 0, 100);
 }
 
 array_t get_even_indexed_strings(array_t list) {
-	array_t new_list = filter(index_string, list);
+    array_t parity_list = generate_list(list.len, sizeof(int), NULL);
+    parity_list.len--;
+    for_each(set_parity, parity_list);
+    parity_list.len++;
+
+    array_t aux_list = map_multiple(set_string, sizeof(char*), string_destructor, 2, list, parity_list);
+    array_t new_list = filter(check_string, aux_list);
+
 	return new_list;
 }
 
@@ -128,10 +164,7 @@ void apply_generator(void *elem) {
 	*(array_t *)elem = generate_list(1, sizeof(array_t), NULL);
 }
 
-// Destructor de lista
-void list_destructor(void *list) {
-	free(((array_t *)list)->data);
-}
+
 
 // Seteaza o coloana de numere din matrice
 void set_col(void *elem) {
@@ -147,15 +180,18 @@ void set_col(void *elem) {
 
 // Seteaza numerele matricei
 void set_nums(void *list) {
-	static int i = 1;
+	int i;
 	*(int *)((array_t *)list)->data = i;
 	for_each(set_col, *(array_t *)list);
 	set_col(NULL);
-	i++;
+}
+
+void set_size(void *elem) {
 }
 
 array_t generate_square_matrix(int n) {
 	array_t new_list_list = generate_list(n, sizeof(array_t), list_destructor);
+    for_each(set_size, new_list_list);
 	for (int i = 0; i < n; i++) {
 		*(array_t *)(new_list_list.data + i * sizeof(array_t)) =
 				generate_list(n, sizeof(array_t), NULL);
