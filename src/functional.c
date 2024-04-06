@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include <stdio.h>
-
 void for_each(void (*func)(void *), array_t list)
 {
 	// Parcurge fiecare element al listei si aplica functia asupra lui
