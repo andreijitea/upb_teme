@@ -1,16 +1,8 @@
 run: tema1
 	./tema1
 
-build: main.o train_list.o command_queue.o
-	gcc main.o train_list.o command_queue.o -g -o tema1
+build: main.c train_list.c train_list.h command_queue.c command_queue.h
+	gcc main.c train_list.c command_queue.c -o tema1
 
-main.o: main.c
-	gcc -c main.c
-
-train_list.o: train_list.c train_list.h
-	gcc -c train_list.c
-
-command_queue.o: command_queue.c command_queue.h
-	gcc -c command_queue.c
 clean:
-	rm -rf tema1 *.o
+	rm -rf tema1

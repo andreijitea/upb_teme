@@ -40,4 +40,4 @@ void reverseQueue(T_Queue *queue);
 
 void printfQueue(T_Queue *queue);
 
-#endif //SDA_TEMA1_COMMAND_QUEUE_H
+#endif

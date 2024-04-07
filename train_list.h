@@ -42,4 +42,4 @@ void searchRight(T_List *list, char* word, FILE *file);
 
 void printfList(T_List *list);
 
-#endif //SDA_TEMA1_TRAIN_LIST_H
+#endif

@@ -19,9 +19,9 @@ Lista am implementat-o conform indicatiilor date in cerinta, singura modificare 
 
 Coada respecta, de asemenea, cerinta temei, dar, precum lista, am folosit si o variabila de lungime a cozii.
 
-Pentru meniul "interactiv", care citeste instructiunile din fisierul de intrare, am hotarat sa asociez fiecarei comenzi, care este salvata in coada, un cod, pentru a le diferentia mai usor.
+Implementand meniul "interactiv", care citeste instructiunile din fisierul de intrare, am hotarat sa asociez fiecarei comenzi, care este salvata in coada, un cod, pentru a le diferentia mai usor.
 
-Deoarece am vrut a da o uniformitate codului, din punct de vedere lingvistic, am intentionat sa scriu cat mai mult in engleza, singurele exceptii fiind comentariile.
+Pentru a da o uniformitate codului, din punct de vedere lingvistic, am intentionat sa scriu cat mai mult in engleza, singurele exceptii fiind comentariile.
 
 Fisierele sursa contin suficiente comentarii pentru a intelege amanuntele rezolvarii acestei teme, asadar nu voi continua in acest README explicatiile codului.
 
@@ -31,7 +31,7 @@ Fisierele sursa contin suficiente comentarii pentru a intelege amanuntele rezolv
 
 Arhiva contine urmatoarele fisiere:
 - README.md: acest document.
-- Makefile: contine cele 3 reguli necesare (build, run, clean), plus inca 3 reguli intermediare celei "build".
+- Makefile: contine cele 3 reguli necesare (build, run, clean).
 - main.c: contine meniul "interactiv" si leaga cele 3 task-uri intr-un tot unitar.
 - train_list.c & train_list.h: contin implementarea listei (pentru tren).
 - command_queue.c & command_queue.h: contin implementarea cozii (pentru comenzi).

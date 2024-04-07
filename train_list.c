@@ -287,10 +287,6 @@ void searchRight(T_List *list, char* word, FILE *file) {
 	return;
 }
 
-
-
-
-
 // FUNCTIE FOLOSITA IN DEBUGGING
 void printfList(T_List *list) {
 	// Set a pointer to the first "real" cell (primul vagon)
