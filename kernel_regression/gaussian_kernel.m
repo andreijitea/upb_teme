@@ -1,4 +1,5 @@
 function retval = gaussian_kernel (x, y, sigma)
-  # TO DO: implement gaussian kernel function
-  
+  numarator = norm(x-y, 2)^2;
+  numitor = 2 * sigma^2;
+  retval = exp(-numarator/numitor);
 endfunction
