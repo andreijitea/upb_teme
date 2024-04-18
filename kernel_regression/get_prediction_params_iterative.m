@@ -7,10 +7,10 @@ function [a] = get_prediction_params_iterative (K, y, lambda)
 
 
   % Setează toleranța și numărul maxim de iterații
-  tol = 1e-10;
-  max_iter = 1000;
+  tol = 1e-5;
+  max_iter = 100;
 
   % Folosește metoda gradientului conjugat
-  %[a] = conjugate_gradient(K, y, a, tol, max_iter);
-  [a] = cgs(K, y);
+  [a] = conjugate_gradient(K, y, a, tol, max_iter);
+  %[a] = cgs(K, y);
 endfunction

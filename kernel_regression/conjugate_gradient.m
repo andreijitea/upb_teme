@@ -2,16 +2,15 @@ function [x] = conjugate_gradient (A, b, x0, tol, max_iter)
   r = b - A * x0;
   v = r;
   x = x0;
-  tolsquared = tol^2;
-  k = 0;
+  tol_sq = tol^2;
+  k = 1;
   
-  while k < max_iter && norm(r)^2 > tolsquared
-      Av = A * v;
-      alpha = (r' * r) / (v' * Av);
-      x = x + alpha * v;
-      r = r - alpha * Av;
-      beta = (r' * r) / (v' * v);
-      v = r + beta * v;
+  while k <= max_iter && norm(r)^2 > tol_sq
+      t = (r' * r) / (v' * A * v);
+      x = x + t * v;
+      r = r - t * A * v;
+      s = (r' * r) / (v' * v);
+      v = r + s * v;
       k = k + 1;
   end
 endfunction
