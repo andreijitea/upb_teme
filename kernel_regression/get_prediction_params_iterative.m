@@ -8,9 +8,11 @@ function [a] = get_prediction_params_iterative (K, y, lambda)
 
   % Setează toleranța și numărul maxim de iterații
   tol = 1e-5;
-  max_iter = 100;
+  max_iter = 2500;
 
   % Folosește metoda gradientului conjugat
-  [a] = conjugate_gradient(K, y, a, tol, max_iter);
-  %[a] = cgs(K, y);
+  % Regularizarea matricei K
+  A = K + lambda * eye(m);
+  b = y;
+  [a] = conjugate_gradient(A, b, a, tol, max_iter);
 endfunction
