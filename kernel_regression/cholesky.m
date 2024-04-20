@@ -11,7 +11,7 @@ function [L] = cholesky (A)
 		% Calculeaza termenii de pe coloana j, de sub diagonala
 		L(j+1:n, j) = A(j+1:n, j) / L(j,j);
 		
-		% Actualizeaza minorul matricei A, de la A(j, j) -> A(n, n)
+		% Actualizeaza minorul matricei A, de la A(j+1, j+1) -> A(n, n)
 		A(j+1:n, j+1:n) = A(j+1:n, j+1:n) - L(j+1:n, j) * L(j+1:n, j)';
 	end
 endfunction
