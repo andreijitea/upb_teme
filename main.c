@@ -58,9 +58,6 @@ int main(int argc, char *argv[]) {
                 addSuffix(tree, &word[j]);
             }
         }
-        printf("%d\n", countLeaves(tree));
-        printf("%d\n", countKLenSuffixes(tree, k));
-        printf("%d\n", maxChildren(tree));
         /*
          * Afiseaza numarul nodurilor frunza
          * ale arborelui in fisierul de iesire
@@ -70,7 +67,7 @@ int main(int argc, char *argv[]) {
          * Afiseaza numarul de sufixe de lungime k
          * ale arborelui in fisierul de iesire
          */
-        fprintf(outfile, "%d\n", countKLenSuffixes(tree, k+1));
+        fprintf(outfile, "%d\n", countKLenSuffixes(tree, k+1, 0));
         /*
          * Afiseaza numarul maxim de descendenti
          * directi ai unui nod al arborelui

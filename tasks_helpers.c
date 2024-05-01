@@ -45,16 +45,19 @@ int countLeaves(Tree tree) {
 }
 
 /*
- * Numara sufixele de dimensiune k dintr-un arbore
+ * Numara sufixele de dimensiune k dintr-un arbore,
+ * comparand adancimea curenta cu dimensiunea k
+ * (k+1 deoarece se ia in considerare si caracterul '$')
  */
-int countKLenSuffixes(Tree tree, int k) {
+int countKLenSuffixes(Tree tree, int k, int depth) {
     if (tree == NULL)
         return 0;
-    if (tree->letter == '$' && k == 0)
-        return 1;
     int len = 0;
-    for (int i = 0; i < CHILD_LEN; ++i) {
-        len += countKLenSuffixes(tree->children[i], k);
+    if (tree->letter == '$' && depth == k)
+        return 1;
+    
+    for (int i = 0; i < CHILD_LEN; i++) {
+        len += countKLenSuffixes(tree->children[i], k, depth+1);
     }
     return len;
 }
