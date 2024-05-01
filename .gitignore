@@ -1,3 +1,6 @@
+in
+out
+rezultat_valgrind.txt
 tema2
 checker.sh
 tests
