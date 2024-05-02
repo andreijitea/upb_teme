@@ -14,69 +14,16 @@ int main(int argc, char *argv[]) {
     if (strcmp(argv[1], "-c1") == 0) {
         infile = fopen(argv[2], "r");
         outfile = fopen(argv[3], "w");
-
-        int wordcount;
-        fscanf(infile, "%d", &wordcount);
-        /*
-         * Citeste cuvant cu cuvant fisierul dat si
-         * adauga sufixele fiecaruia in arbore
-         */
-        for (int i = 0; i < wordcount; i++) {
-            char word[100];
-            fscanf(infile, "%s", word);
-            // Adauga caracterul special '$' la finalul cuvantului
-            int wordlen = strlen(word);
-            word[wordlen] = '$';
-            word[wordlen+1] = '\0';
-            // Adauga sufixele cuvantului in arbore
-            for (int j = wordlen; j >= 0; j--) {
-                addSuffix(tree, &word[j]);
-            }
-        }
-        // Afiseaza arborele in fisierul de iesire
-        printTree(tree, outfile);
+        task1(tree, infile, outfile);
     } else if (strcmp(argv[1], "-c2") == 0) {
         infile = fopen(argv[3], "r");
         outfile = fopen(argv[4], "w");
         int k = atoi(argv[2]);
-        // Parte identica cu cerinta 1
-        int wordcount;
-        fscanf(infile, "%d", &wordcount);
-        /*
-         * Citeste cuvant cu cuvant fisierul dat si
-         * adauga sufixele fiecaruia in arbore
-         */
-        for (int i = 0; i < wordcount; i++) {
-            char word[100];
-            fscanf(infile, "%s", word);
-            // Adauga caracterul special '$' la finalul cuvantului
-            int wordlen = strlen(word);
-            word[wordlen] = '$';
-            word[wordlen+1] = '\0';
-            // Adauga sufixele cuvantului in arbore
-            for (int j = wordlen; j >= 0; j--) {
-                addSuffix(tree, &word[j]);
-            }
-        }
-        /*
-         * Afiseaza numarul nodurilor frunza
-         * ale arborelui in fisierul de iesire
-         */
-        fprintf(outfile,"%d\n", countLeaves(tree));
-        /*
-         * Afiseaza numarul de sufixe de lungime k
-         * ale arborelui in fisierul de iesire
-         */
-        fprintf(outfile, "%d\n", countKLenSuffixes(tree, k+1, 0));
-        /*
-         * Afiseaza numarul maxim de descendenti
-         * directi ai unui nod al arborelui
-         * in fisierul de iesire
-         */
-        fprintf(outfile, "%d\n", maxChildren(tree));
+        task2(tree, infile, outfile, k);
     } else if (strcmp(argv[1], "-c3") == 0) {
         infile = fopen(argv[2], "r");
         outfile = fopen(argv[3], "w");
+        task3(tree, infile, outfile);
     } else if (strcmp(argv[1], "-c4") == 0) {
         infile = fopen(argv[2], "r");
         outfile = fopen(argv[3], "w");
