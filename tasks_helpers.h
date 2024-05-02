@@ -16,4 +16,4 @@ void task1(Tree tree, FILE *infile, FILE *outfile);
 void task2(Tree tree, FILE *infile, FILE *outfile, int k);
 void task3(Tree tree, FILE *infile, FILE *outfile);
 
-#endif //SDA_TEMA2_TASKS_HELPERS_H
+#endif

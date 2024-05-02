@@ -1,6 +1,9 @@
-run:
-	./tema2
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra
+EXEC = tema2
+SRC = main.c tree.c tasks_helpers.c
+
 build:
-	gcc -Wall -o tema2 main.c tree.c tasks_helpers.c
+	$(CC) $(CFLAGS) $(SRC) -o $(EXEC)
 clean:
-	rm tema2
+	rm $(EXEC)
