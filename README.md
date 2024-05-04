@@ -42,6 +42,7 @@ Arhiva .zip contine urmatoarele fisiere:
 - `README.md` - fisierul curent.
 - `tree.c` si `tree.h` - contin implementarea arborelui simplu de sufixe (nu cel compact) si a functiilor necesare pentru a-l construi si a-l afisa.
 - `tasks_helpers.c` si `tasks_helpers.h` - contin implementarea functiilor ajutatoare pentru rezolvarea primelor 3 cerinte.
+- `main.c` - apeleaza functiile `task1`, `task2` si `task3`, in functia parametrilor primiti de la linia de comanda.
 
 ## Punctaj obtinut cu checker-ul local
 In urma rularii checker-ului local, am obtinut urmatorul punctaj:  
