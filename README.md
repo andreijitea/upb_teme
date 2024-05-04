@@ -33,8 +33,8 @@ Rezolvarea acestei cerinte consta in functia `task3` din fisierul `tasks_helpers
 In cadrul acestei functii, sunt apelate alte 2 functii ajutatoare:
 - `makeTree` - construieste arborele de sufixe pentru un numar de cuvinte.
 - `findSuffix` - cauta un sufix in arborele de sufixe.
-
-Mentionez ca fisierele sursa contin un numar mare de comentarii, care sper sa lamureasca orice detaliu legat de implementare, pe care nu l-am prezentat in mai sus.
+---
+*Mentionez ca fisierele sursa contin un numar mare de comentarii, care sper sa lamureasca orice detaliu legat de implementare, pe care nu l-am prezentat in mai sus.*
 
 ## Continutul arhivei .zip
 Arhiva .zip contine urmatoarele fisiere:
