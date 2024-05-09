@@ -5,8 +5,8 @@ section .rodata
 	num_rounds dd 10
 
 section .data
-    round dd 0
-    i db 0
+	round dd 0
+	i db 0
 
 
 section .text
@@ -30,52 +30,52 @@ treyfer_crypt:
 	;; Reseteaza counter-ul de runde
 	mov dword [round], 0
 cr_for_round:
-    ;; Reseteaza i
-    mov byte [i], 0
-    cr_for_i:
-        ;; Aduna la t (bl) caracterul de pe pozitia i din key
-        movzx eax, byte [i]
-        add bl, [edi + eax]
+	;; Reseteaza i
+	mov byte [i], 0
+cr_for_i:
+	;; Aduna la t (bl) caracterul de pe pozitia i din key
+	movzx eax, byte [i]
+	add bl, [edi + eax]
 
-        ;; Substituie t (bl) cu valoarea din sbox corespunzatoare lui t (bl)
-        movzx eax, bl
-        mov bl, [sbox + eax]
+	;; Substituie t (bl) cu valoarea din sbox corespunzatoare lui t (bl)
+	movzx eax, bl
+	mov bl, [sbox + eax]
 
-        ;; Aduna la t (bl) caracterul de pe pozitia i+1 din text (daca i+1 == 8, atunci i+1 == 0)
-        ;; folosind (i + 1) % 8, rezultatul se gaseste in edx
-        movzx eax, byte [i]
-        inc eax
-        mov ecx, 8
-        xor edx, edx
-        div ecx
-        add bl, [esi + edx]
+	;; Aduna la t (bl) caracterul de pe pozitia i+1 din text (daca i+1 == 8, atunci i+1 == 0)
+	;; folosind (i + 1) % 8, rezultatul se gaseste in edx
+	movzx eax, byte [i]
+	inc eax
+	mov ecx, 8
+	xor edx, edx
+	div ecx
+	add bl, [esi + edx]
 
-        ;; Roteste la stanga t (bl) cu 1 bit
-        rol bl, 1
+	;; Roteste la stanga t (bl) cu 1 bit
+	rol bl, 1
 
-        ;; Byte-ul de pe poziția (i + 1) % 8 din text va fi actualizat cu valoarea variabilei t (bl)
-        ;; folosind (i + 1) % 8, rezultatul se gaseste in edx
-        movzx eax, byte [i]
-        inc eax
-        mov ecx, 8
-        xor edx, edx
-        div ecx
-        mov byte [esi + edx], bl
+	;; Byte-ul de pe poziția (i + 1) % 8 din text va fi actualizat cu valoarea variabilei t (bl)
+	;; folosind (i + 1) % 8, rezultatul se gaseste in edx
+	movzx eax, byte [i]
+	inc eax
+	mov ecx, 8
+	xor edx, edx
+	div ecx
+	mov byte [esi + edx], bl
 
-        ;; Itereaza for_i
-        inc byte [i]
-        cmp byte [i], 8
-        jl cr_for_i
+	;; Itereaza for_i
+	inc byte [i]
+	cmp byte [i], 8
+	jl cr_for_i
 
 continue_cr_for_round:
-    ;; Itereaza for_round
-    inc dword [round]
-    mov eax, [num_rounds]
-    cmp [round], eax
-    jl cr_for_round
+	;; Itereaza for_round
+	inc dword [round]
+	mov eax, [num_rounds]
+	cmp [round], eax
+	jl cr_for_round
 
 end_treyfer_crypt:
-    ;; FREESTYLE ENDS HERE
+	;; FREESTYLE ENDS HERE
 	;; DO NOT MODIFY
 	popa
 	leave
@@ -98,53 +98,52 @@ treyfer_dcrypt:
 	;; Se considera bh = top si bl = bottom
 
 dcr_for_round:
-    ;; Reseteaza i
-    mov byte [i], 7
-    dcr_for_i:
-        xor bx, bx
-        ;; Aduna la top (bh) caracterul de pe pozitia i din key si din text
-        movzx eax, byte [i]
-        add bh, [edi + eax]
-        add bh, [esi + eax]
+	;; Reseteaza i
+	mov byte [i], 7
+dcr_for_i:
+	xor bx, bx
+	;; Aduna la top (bh) caracterul de pe pozitia i din key si din text
+	movzx eax, byte [i]
+	add bh, [edi + eax]
+	add bh, [esi + eax]
 
-        ;; Substituie top (bh) cu valoarea din sbox corespunzatoare lui top (bh)
-        movzx eax, bh
-        mov bh, [sbox + eax]
+	;; Substituie top (bh) cu valoarea din sbox corespunzatoare lui top (bh)
+	movzx eax, bh
+	mov bh, [sbox + eax]
 
-        ;; Muta caracterul de pe pozitia (i + 1) % 8 din text in bottom (bl)
-        ;; folosind (i + 1) % 8, rezultatul se gaseste in edx
-        movzx eax, byte [i]
-        inc eax
-        mov ecx, 8
-        xor edx, edx
-        div ecx
-        mov bl, [esi + edx]
+	;; Muta caracterul de pe pozitia (i + 1) % 8 din text in bottom (bl)
+	;; folosind (i + 1) % 8, rezultatul se gaseste in edx
+	movzx eax, byte [i]
+	inc eax
+	mov ecx, 8
+	xor edx, edx
+	div ecx
+	mov bl, [esi + edx]
 
-        ;; Roteste la dreapta bottom (bl) cu 1 bit
-        ror bl, 1
+	;; Roteste la dreapta bottom (bl) cu 1 bit
+	ror bl, 1
 
-        ;; Byte-ul de pe poziția (i + 1) % 8 din text va fi actualizat cu diferenta bottom (bl) - top (bh)
-        ;; folosind (i + 1) % 8, rezultatul se gaseste in edx
-        movzx eax, byte [i]
-        inc eax
-        mov ecx, 8
-        xor edx, edx
-        div ecx
-        sub bl, bh
-        mov byte [esi + edx], bl
+	;; Byte-ul de pe poziția (i + 1) % 8 din text va fi actualizat cu diferenta bottom (bl) - top (bh)
+	;; folosind (i + 1) % 8, rezultatul se gaseste in edx
+	movzx eax, byte [i]
+	inc eax
+	mov ecx, 8
+	xor edx, edx
+	div ecx
+	sub bl, bh
+	mov byte [esi + edx], bl
 
-
-        ;; Itereaza for_i
-        dec byte [i]
-        cmp byte [i], 0
-        jge dcr_for_i
+	;; Itereaza for_i
+	dec byte [i]
+	cmp byte [i], 0
+	jge dcr_for_i
 
 continue_dcr_for_round:
-    ;; Itereaza for_round
-    inc dword [round]
-    mov eax, [num_rounds]
-    cmp [round], eax
-    jl dcr_for_round
+	;; Itereaza for_round
+	inc dword [round]
+	mov eax, [num_rounds]
+	cmp [round], eax
+	jl dcr_for_round
 
 end_treyfer_dcrypt:
 	;; FREESTYLE ENDS HERE
