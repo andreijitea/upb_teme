@@ -55,3 +55,6 @@ Pentru a le rezolva, am urmat pseudocodul din enuntul temei.
 - Task 2: 30p
 - Task 3: 0p
 - Bonus: 30p
+- Linter: 5p
+- README: 5p
+- Total: 100p
