@@ -5,5 +5,19 @@ function y_interp = P_spline (coef, x, x_interp)
 	% y_interp(i) = P_spline(x_interp(i)), i = 0 : length(x_interp) - 1
 	% Be careful! Indexes in Matlab start from 1, not 0
 
-	% TODO: Calculate y_interp using the Spline coefficients
+	% Calculate y_interp using the Spline coefficients
+    y_interp = zeros(length(x_interp));
+    
+    for i = 0 : length(x_interp) - 1
+		% Calculeaza intervalul in care se incadreaza x_interp(i + 1)
+        j = find(x <= x_interp(i + 1), 1, 'last');
+        if j > length(x) - 1
+            j = length(x) - 1;
+        end
+        
+		% Calculeaza valoarea pentru spline
+		for k = 1 : 4
+        	y_interp(i + 1) = y_interp(i + 1) + coef(4 * (j - 1) + k) * (x_interp(i + 1) - x(j))^(k - 1);
+		end
+    end
 end
