@@ -1,6 +1,4 @@
 function coef = spline_c2 (x, y)
-	% Remember that the indexes in Matlab start from 1, not 0
-
 	% si(x)   = ai + bi(x - xi) + ci(x - xi)^2 + di(x - xi)^3
 	% si'(x)  =      bi         + 2ci(x - xi)  + 3di(x - xi)^2
 	% si''(x) =                   2ci          + 6di(x - xi)
@@ -48,7 +46,7 @@ function coef = spline_c2 (x, y)
 	for j = 3 : 4
 		A(4 * n, 4 * (n - 1) + j) = (j - 1) * (j - 2) * (x(n + 1) - x(n))^(j - 3);
 	end
-	% Solve the system of equations
+	% Rezolva sistemul
 	coef = inv(A) * b;
 	coef = coef(:,1);
 
