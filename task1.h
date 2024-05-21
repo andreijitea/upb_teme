@@ -4,30 +4,52 @@
 #include <string.h>
 #include <stdio.h>
 
-typedef struct {
+// Structura pentru lista de adiacenta a unui tronson
+typedef struct adj_list_tr {
+    int dest;
     int year;
     float deg;
-} TrCell, *TrList;
+    struct adj_list_tr *next;
+} AdjCellTr, *AdjListTr;
 
+// Structura pentru un graf de tronsoane
+typedef struct {
+    int count;
+    AdjListTr *adj_list;
+} GraphTr;
+
+// Structura pentru lista de adiacenta a unui oras
 typedef struct adj_list_city {
     int print_order;
     char dest[20];
     int tr_count;
-    TrList tr_list;
+    int *tr_list_ids;
+    float *tr_list_deg;
     struct adj_list_city *next;
 } AdjCellCity, *AdjListCity;
 
+// Structura pentru un graf de orase
 typedef struct {
     int count;
     AdjListCity *adj_list;
 } GraphCity;
 
-GraphCity *readGraphCity(FILE *input, int count);
+GraphCity *readGraphCity(FILE *input, int count, int *tot_tr_c);
 GraphCity *initGraphCity(int count);
 AdjListCity createCellCity(char *dest);
-void ageGraph(GraphCity *g, int duration);
-void addEdgeCity(GraphCity *g, char *source, char *dest, int order, int tr_count, TrList tr_list);
+void addEdgeCity(GraphCity *g, char *source, char *dest, int order, int tr_count, int *tr_list_ids, float *tr_list_deg);
 void printGraphCity(GraphCity *g);
 void deleteGraphCity(GraphCity *g);
+
+void ageGraph(GraphCity *graphCity, GraphTr *graphTr, int duration);
+
+GraphTr *initGraphTr(int count);
+AdjListTr createCellTr(int source);
+void addEdgeTr(GraphTr *g, int source, int dest, float deg);
+void buildGraphTr(GraphCity *graphCity, GraphTr *graphTr);
+void deleteGraphTr(GraphTr *g);
+
+void prgr(GraphCity *g);
+void prtr(GraphTr *g);
 
 #endif //SDA_TEMA3_TASK1_H

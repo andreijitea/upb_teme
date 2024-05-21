@@ -12,13 +12,28 @@ int main(int argc, char *argv[])
         printf("Numarul incorect de argumente\n");
         return 1;
     } else if (strcmp(argv[1], "1") == 0) {
-        int r, k, l;
-        GraphCity *graph;
+        int r, k, l, *tot_tr_c;
+        tot_tr_c = (int *)calloc(1, sizeof(int));
+
+        GraphCity *graphCity;
+        GraphTr *graphTr;
         fscanf(in_file, "%d %d %d", &r, &k, &l);
         printf("%d %d %d\n", r, k, l);
-        graph = readGraphCity(in_file, 2 * r);
-        printGraphCity(graph);
-        deleteGraphCity(graph);
+        graphCity = readGraphCity(in_file, 2 * r, tot_tr_c);
+        printGraphCity(graphCity);
+        printf("\n");
+        prgr(graphCity);
+        printf("\n");
+        graphTr = initGraphTr(*tot_tr_c);
+        buildGraphTr(graphCity, graphTr);
+        prtr(graphTr);
+        printf("\n");
+
+        ageGraph(graphCity, graphTr, k);
+
+        deleteGraphCity(graphCity);
+        deleteGraphTr(graphTr);
+        free(tot_tr_c);
     } else if (strcmp(argv[1], "2") == 0) {
         // task 2
     } else {
