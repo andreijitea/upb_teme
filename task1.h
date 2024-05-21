@@ -38,10 +38,11 @@ GraphCity *readGraphCity(FILE *input, int count, int *tot_tr_c);
 GraphCity *initGraphCity(int count);
 AdjListCity createCellCity(char *dest);
 void addEdgeCity(GraphCity *g, char *source, char *dest, int order, int tr_count, int *tr_list_ids, float *tr_list_deg);
-void printGraphCity(GraphCity *g);
+void printGraphCity(FILE *outfile, GraphCity *g, float max_deg);
 void deleteGraphCity(GraphCity *g);
 
 void ageGraph(GraphCity *graphCity, GraphTr *graphTr, int duration);
+
 
 GraphTr *initGraphTr(int count);
 AdjListTr createCellTr(int source);

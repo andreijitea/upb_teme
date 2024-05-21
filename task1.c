@@ -234,8 +234,11 @@ void ageGraph(GraphCity *graphCity, GraphTr *graphTr, int duration) {
             temp_deg[id] = temp_deg[id] * 2;
         }
 
-
+        // Truncheaza degradarea tronsoanelor la 100
         for (int j = 0; j < graphTr->count; j++) {
+            if (temp_deg[j] > 100) {
+                temp_deg[j] = 100;
+            }
             printf("%d %.2f\n", j, temp_deg[j]);
         }
 
@@ -274,6 +277,12 @@ void ageGraph(GraphCity *graphCity, GraphTr *graphTr, int duration) {
         free(temp_deg);
         free(temp_deg2);
     }
+}
+/*
+ * Functia afiseaza indexul
+ */
+void printCityIds(GraphCity *graphCity, float max_val) {
+    // Afiseaza muchia
 }
 
 /*
@@ -390,8 +399,10 @@ void prgr(GraphCity *g) {
  * Functia afiseaza graful.
  * Afiseaza fiecare muchie in ordinea in care a fost citita.
  */
-void printGraphCity(GraphCity *g) {
+void printGraphCity(FILE *outfile, GraphCity *g, float max_deg) {
     int order = 0;
+    float deg_sum = 0;
+    int *ok_ids = calloc(g->count / 2, sizeof(int));
     // Parcurge fiecare nod sursa (lista de adiacenta)
     for (int i = 0; i < g->count; i++) {
         AdjListCity aux = g->adj_list[i];
@@ -405,14 +416,25 @@ void printGraphCity(GraphCity *g) {
         while (aux != NULL) {
             // Afiseaza muchia daca ordinea de afisare este corecta
             if (order == aux->print_order) {
+                deg_sum = 0;
                 printf("%s %s %d ", source, aux->dest, aux->tr_count);
+                fprintf(outfile, "%s %s %d ", source, aux->dest, aux->tr_count);
                 // Afiseaza tronsoanele muchiei
                 for (int j = 0; j < aux->tr_count; j++) {
                     printf("%.2f ", aux->tr_list_deg[j]);
+                    fprintf(outfile, "%.2f ", aux->tr_list_deg[j]);
+                    deg_sum += aux->tr_list_deg[j];
                 }
+                // Verifica daca degradarea medie a muchiei este sub valoarea data
+                if (deg_sum / aux->tr_count < max_deg) {
+                    ok_ids[order] = 1;
+                }
+
                 printf("\n");
+                fprintf(outfile, "\n");
                 aux = aux->next;
                 order++;
+
             }
             // Daca ordinea nodului este mai mare, cauta nodul cu ordinea corecta si afiseaza muchia
             else if (order < aux->print_order) {
@@ -428,12 +450,22 @@ void printGraphCity(GraphCity *g) {
                     while (temp != NULL) {
                         // Afiseaza muchia daca ordinea de afisare este corecta
                         if (temp->print_order == order) {
+                            deg_sum = 0;
                             printf("%s %s %d ", temp_source, temp->dest, temp->tr_count);
+                            fprintf(outfile, "%s %s %d ", temp_source, temp->dest, temp->tr_count);
                             // Afiseaza tronsoanele muchiei
                             for (int k = 0; k < temp->tr_count; k++) {
                                 printf("%.2f ", temp->tr_list_deg[k]);
+                                fprintf(outfile, "%.2f ", temp->tr_list_deg[k]);
+                                deg_sum += temp->tr_list_deg[k];
                             }
+                            // Verifica daca degradarea medie a muchiei este sub valoarea data
+                            if (deg_sum / temp->tr_count < max_deg) {
+                                ok_ids[order] = 1;
+                            }
+
                             printf("\n");
+                            fprintf(outfile, "\n");
                             order++;
                             break;
                         }
@@ -446,6 +478,13 @@ void printGraphCity(GraphCity *g) {
             }
         }
     }
+    for (int i = 0; i < g->count / 2; i++) {
+        if (ok_ids[i] == 1) {
+            printf("%d ", i+1);
+            fprintf(outfile, "%d ", i+1);
+        }
+    }
+    free(ok_ids);
 }
 
 /*
