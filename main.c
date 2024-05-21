@@ -13,12 +13,12 @@ int main(int argc, char *argv[])
         return 1;
     } else if (strcmp(argv[1], "1") == 0) {
         int r, k, l;
-        Graph *graph;
+        GraphCity *graph;
         fscanf(in_file, "%d %d %d", &r, &k, &l);
         printf("%d %d %d\n", r, k, l);
-        graph = readGraph(in_file, 2 * r);
-        printGraph(graph);
-        deleteGraph(graph);
+        graph = readGraphCity(in_file, 2 * r);
+        printGraphCity(graph);
+        deleteGraphCity(graph);
     } else if (strcmp(argv[1], "2") == 0) {
         // task 2
     } else {

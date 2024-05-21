@@ -4,31 +4,30 @@
 #include <string.h>
 #include <stdio.h>
 
-typedef struct tronson {
+typedef struct {
     int year;
     float deg;
-    struct tronson *next;
-    struct tronson *prev;
 } TrCell, *TrList;
 
-typedef struct adjList {
+typedef struct adj_list_city {
     int print_order;
     char dest[20];
     int tr_count;
     TrList tr_list;
-    struct adjList *next;
-} AdjCell, *AdjList;
+    struct adj_list_city *next;
+} AdjCellCity, *AdjListCity;
 
 typedef struct {
     int count;
-    AdjList *adj_list;
-} Graph;
+    AdjListCity *adj_list;
+} GraphCity;
 
-Graph *readGraph(FILE *input, int count);
-Graph *initGraph(int count);
-AdjList createCell(char *dest);
-void addEdge(Graph *g, char *source, char *dest, int order, int tr_count, TrList tr_list);
-void printGraph(Graph *g);
-void deleteGraph(Graph *g);
+GraphCity *readGraphCity(FILE *input, int count);
+GraphCity *initGraphCity(int count);
+AdjListCity createCellCity(char *dest);
+void ageGraph(GraphCity *g, int duration);
+void addEdgeCity(GraphCity *g, char *source, char *dest, int order, int tr_count, TrList tr_list);
+void printGraphCity(GraphCity *g);
+void deleteGraphCity(GraphCity *g);
 
 #endif //SDA_TEMA3_TASK1_H

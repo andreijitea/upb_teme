@@ -7,29 +7,25 @@
  * Pentru fiecare nod destinatie, salveaza ordinea in care a fost citit.
  * Ordinea trebuie pastrata pentru a putea afisa corect graful.
  */
-Graph *readGraph(FILE *input, int count) {
-    Graph *g = initGraph(count);
+GraphCity *readGraphCity(FILE *input, int count) {
+    GraphCity *g = initGraphCity(count);
     char source[20], dest[20];
     for (int i = 0; i < count / 2; i++) {
         int tr_count = 0;
         float tr_deg = 0;
         // Citeste numele nodurilor sursa si destinatie si numarul de tronsoane
         fscanf(input, "%s %s %d", source, dest, &tr_count);
+
         // Citeste tronsoanele unei muchii si le salveaza intr-o lista
-        TrList tr_list = (TrList) malloc(tr_count * sizeof(TrCell));
+        TrList tr_list = (TrList) calloc(tr_count, sizeof(TrCell));
         for (int j = 0; j < tr_count; j++) {
             fscanf(input, "%f", &tr_deg);
             tr_list[j].deg = tr_deg;
-            if (j == 0) {
-                tr_list[j].prev = NULL;
-            } else if (j == tr_count - 1) {
-                tr_list[j].next = NULL;
-            } else {
-                tr_list[j].prev = &tr_list[j - 1];
-                tr_list[j].next = &tr_list[j + 1];
-            }
+            tr_list[j].year = 0;
         }
-        addEdge(g, source, dest, i, tr_count, tr_list);
+
+        // Adauga muchia in graf
+        addEdgeCity(g, source, dest, i, tr_count, tr_list);
     }
     return g;
 }
@@ -40,12 +36,12 @@ Graph *readGraph(FILE *input, int count) {
  * pentru a avea suficiente noduri pentru fiecare muchie,
  * in cazul in care fiecare muchie are un nod sursa si un nod destinatie diferit.
  */
-Graph *initGraph(int count) {
-    Graph *g = (Graph *) malloc(sizeof(Graph));
+GraphCity *initGraphCity(int count) {
+    GraphCity *g = (GraphCity *) malloc(sizeof(GraphCity));
     g->count = count;
 
     // Aloca memorie pentru listele de adiacenta
-    g->adj_list = (AdjList *) malloc(count * sizeof(AdjList));
+    g->adj_list = (AdjListCity *) malloc(count * sizeof(AdjListCity));
     for (int i = 0; i < count; i++) {
         g->adj_list[i] = NULL;
     }
@@ -56,30 +52,35 @@ Graph *initGraph(int count) {
 /*
  * Functia creeaza un nod de tip celula pentru lista de adiacenta.
  */
-AdjList createCell(char *dest) {
-    AdjList cell = (AdjList) malloc(sizeof(AdjCell));
+AdjListCity createCellCity(char *dest) {
+    AdjListCity cell = (AdjListCity) malloc(sizeof(AdjCellCity));
     strcpy(cell->dest, dest);
     cell->next = NULL;
     cell->print_order = -1;
+    cell->tr_count = 0;
+    cell->tr_list = NULL;
 
     return cell;
 }
 
+void ageGraph(GraphCity *g, int duration) {
+    // Afiseaza vecinii fiecarui tronson
 
+}
 
 /*
- * Adauga o muchie in graf de la nodul sursa la nodul destinatie.
+ * Functia adauga o muchie in graf de la nodul sursa la nodul destinatie.
  * Sensul opus nu este necesar.
  */
-void addEdge(Graph *g, char *source, char *dest, int order, int tr_count, TrList tr_list) {
+void addEdgeCity(GraphCity *g, char *source, char *dest, int order, int tr_count, TrList tr_list) {
     // Cauta nodul sursa in listele de adiacenta
     for (int i = 0; i < g->count; i++) {
         // Daca nodul sursa nu exista inca, il adauga, impreuna cu nodul destinatie
         if (g->adj_list[i] == NULL) {
             // Adauga nodul sursa
-            g->adj_list[i] = createCell(source);
+            g->adj_list[i] = createCellCity(source);
             // Adauga nodul destinatie si salveaza ordinea de afisare
-            g->adj_list[i]->next = createCell(dest);
+            g->adj_list[i]->next = createCellCity(dest);
             g->adj_list[i]->next->print_order = order;
             g->adj_list[i]->next->tr_count = tr_count;
             g->adj_list[i]->next->tr_list = tr_list;
@@ -88,12 +89,12 @@ void addEdge(Graph *g, char *source, char *dest, int order, int tr_count, TrList
         // Daca nodul sursa exista deja, adauga nodul destinatie la lista de adiacenta
         else if (strcmp(g->adj_list[i]->dest, source) == 0) {
             // Cauta ultimul nod din lista de adiacenta
-            AdjList aux = g->adj_list[i];
+            AdjListCity aux = g->adj_list[i];
             while (aux->next != NULL) {
                 aux = aux->next;
             }
             // Adauga nodul destinatie si salveaza ordinea de afisare
-            aux->next = createCell(dest);
+            aux->next = createCellCity(dest);
             aux->next->print_order = order;
             aux->next->tr_count = tr_count;
             aux->next->tr_list = tr_list;
@@ -103,14 +104,14 @@ void addEdge(Graph *g, char *source, char *dest, int order, int tr_count, TrList
 }
 
 /*
- * Afiseaza graful.
+ * Functia afiseaza graful.
  * Afiseaza fiecare muchie in ordinea in care a fost citita.
  */
-void printGraph(Graph *g) {
+void printGraphCity(GraphCity *g) {
     int order = 0;
     // Parcurge fiecare nod sursa (lista de adiacenta)
     for (int i = 0; i < g->count; i++) {
-        AdjList aux = g->adj_list[i];
+        AdjListCity aux = g->adj_list[i];
         if (aux == NULL) {
             continue;
         }
@@ -133,7 +134,7 @@ void printGraph(Graph *g) {
             // Daca ordinea nodului este mai mare, cauta nodul cu ordinea corecta si afiseaza muchia
             else if (order < aux->print_order) {
                 for (int j = i; j < g->count; j++) {
-                    AdjList temp = g->adj_list[j];
+                    AdjListCity temp = g->adj_list[j];
                     if (temp == NULL) {
                         continue;
                     }
@@ -164,12 +165,17 @@ void printGraph(Graph *g) {
     }
 }
 
-void deleteGraph(Graph *g) {
+/*
+ * Functia elibereaza memoria alocata pentru graful citit.
+ * Elibereaza memoria alocata pentru listele de adiacenta si pentru tronsoane.
+ */
+void deleteGraphCity(GraphCity *g) {
     for (int i = 0; i < g->count; i++) {
-        AdjList aux = g->adj_list[i];
+        AdjListCity aux = g->adj_list[i];
         while (aux != NULL) {
-            AdjList temp = aux;
+            AdjListCity temp = aux;
             aux = aux->next;
+            free(temp->tr_list);
             free(temp);
         }
     }
