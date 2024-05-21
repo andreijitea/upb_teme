@@ -172,10 +172,108 @@ void addEdgeTr(GraphTr *g, int source, int dest, float deg) {
 //    }
 }
 
-void ageGraph(GraphCity *graphCity, GraphTr *graphTr, int duration) {
-    float *temp_deg = calloc(graphTr->count, sizeof(float));
 
-    free(temp_deg);
+void ageGraph(GraphCity *graphCity, GraphTr *graphTr, int duration) {
+    for (int i = 0; i < duration; i++) {
+        float *temp_deg = calloc(graphTr->count, sizeof(float));
+        float *temp_deg2 = calloc(graphTr->count, sizeof(float));
+        int *visited = calloc(graphTr->count, sizeof(int));
+
+        /*
+         * Salveaza degradarea fiecarui tronson intr-un vector,
+         * pentru a le putea procesa mai usor
+         */
+        for (int j = 0; j < graphTr->count; j++) {
+            AdjListTr aux = graphTr->adj_list[j];
+            if (aux == NULL) {
+                continue;
+            }
+            aux = aux->next;
+            while (aux != NULL) {
+                temp_deg[aux->dest] = aux->deg;
+                aux = aux->next;
+            }
+        }
+
+        // Proceseaza degradarea tronsoanelor cu degradare 0
+        for (int j = 0; j < graphTr->count; j++) {
+            AdjListTr aux = graphTr->adj_list[j];
+            if (aux == NULL) {
+                continue;
+            }
+            int id = aux->dest;
+            if (temp_deg[id] != 0 || visited[id] == 1) {
+                continue;
+            }
+            float max_deg = 0;
+            printf("%d %.2f: ", id, aux->deg);
+            aux = aux->next;
+            while (aux != NULL) {
+                printf("%d-%.2f ", aux->dest, aux->deg);
+                if (aux->deg > max_deg) {
+                    max_deg = aux->deg;
+                }
+                aux = aux->next;
+            }
+            printf("| %.2f\n", max_deg);
+            temp_deg[id] = max_deg / 2;
+            visited[id] = 1;
+        }
+
+        // Proceseaza degradarea tronsoanelor cu degradare diferita de 0
+        for (int j = 0; j < graphTr->count; j++) {
+            AdjListTr aux = graphTr->adj_list[j];
+            if (aux == NULL) {
+                continue;
+            }
+            int id = aux->dest;
+            if (temp_deg[id] == 0 || visited[id] == 1) {
+                continue;
+            }
+            visited[id] = 1;
+            temp_deg[id] = temp_deg[id] * 2;
+        }
+
+
+        for (int j = 0; j < graphTr->count; j++) {
+            printf("%d %.2f\n", j, temp_deg[j]);
+        }
+
+        // Modifica graful de tronsoane cu noile valori de degradare
+        for (int j = 0; j < graphTr->count; j++) {
+            AdjListTr aux = graphTr->adj_list[j];
+            if (aux == NULL) {
+                continue;
+            }
+            aux = aux->next;
+            while (aux != NULL) {
+                aux->deg = temp_deg[aux->dest];
+                aux = aux->next;
+            }
+        }
+
+        // Modifica graful de orase cu noile valori de degradare
+        for (int j = 0; j < graphCity->count; j++) {
+            AdjListCity aux = graphCity->adj_list[j];
+            if (aux == NULL) {
+                continue;
+            }
+            aux = aux->next;
+            while (aux != NULL) {
+                for (int k = 0; k < aux->tr_count; k++) {
+                    aux->tr_list_deg[k] = temp_deg[aux->tr_list_ids[k]];
+                }
+                aux = aux->next;
+            }
+        }
+
+        prtr(graphTr);
+
+
+        free(visited);
+        free(temp_deg);
+        free(temp_deg2);
+    }
 }
 
 /*
@@ -310,7 +408,7 @@ void printGraphCity(GraphCity *g) {
                 printf("%s %s %d ", source, aux->dest, aux->tr_count);
                 // Afiseaza tronsoanele muchiei
                 for (int j = 0; j < aux->tr_count; j++) {
-                    printf("%d-%.2f ", aux->tr_list_ids[j], aux->tr_list_deg[j]);
+                    printf("%.2f ", aux->tr_list_deg[j]);
                 }
                 printf("\n");
                 aux = aux->next;
@@ -333,7 +431,7 @@ void printGraphCity(GraphCity *g) {
                             printf("%s %s %d ", temp_source, temp->dest, temp->tr_count);
                             // Afiseaza tronsoanele muchiei
                             for (int k = 0; k < temp->tr_count; k++) {
-                                printf("%d-%.2f ", temp->tr_list_ids[k], temp->tr_list_deg[k]);
+                                printf("%.2f ", temp->tr_list_deg[k]);
                             }
                             printf("\n");
                             order++;

@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
         printf("\n");
 
         ageGraph(graphCity, graphTr, k);
-
+        printGraphCity(graphCity);
         deleteGraphCity(graphCity);
         deleteGraphTr(graphTr);
         free(tot_tr_c);
