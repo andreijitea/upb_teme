@@ -1,7 +1,5 @@
 /* JITEA Andrei-Petru - 315CB */
 
-#include <stdio.h>
-#include <string.h>
 #include "task1.h"
 #include "task2.h"
 
@@ -58,6 +56,8 @@ int main(int argc, char *argv[])
         // Seteaza indicii oraselelor
         setCityIds(graphCity2);
 
+        // Aplica algoritmul lui Dijkstra pentru a gasi drumul minim
+        // de la orasul de start la toate celelalte orase
         dijkstra(graphCity2, start_city, k);
 
         // Afișează graful de orase, conform cerintei

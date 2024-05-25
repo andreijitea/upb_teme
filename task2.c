@@ -1,5 +1,6 @@
-#include "task2.h"
+/* JITEA Andrei-Petru - 315CB */
 
+#include "task2.h"
 
 /*
  * Functia citeste un graf de orase din fisierul de intrare si il returneaza
@@ -289,7 +290,7 @@ void dijkstra(GraphCity2 *g, char *source, int max_edges) {
         // Decrementeaza numarul de muchii necesare
         g->end_count--;
     }
-    
+
     // Elibereaza memoria pentru vectorii auxiliari
     free(distances);
     free(visited);

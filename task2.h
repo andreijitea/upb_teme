@@ -1,3 +1,5 @@
+/* JITEA Andrei-Petru - 315CB */
+
 #ifndef SDA_TEMA3_TASK2_H
 #define SDA_TEMA3_TASK2_H
 
