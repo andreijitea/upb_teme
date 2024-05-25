@@ -1,6 +1,11 @@
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra -std=c99
+EXEC = tema3
+SRC = main.c task1.c task2.c
+
 build:
-	touch tema3.in
-	gcc main.c task1.c -o tema3
+	touch $(EXEC).in
+	$(CC) $(CFLAGS) $(SRC) -o $(EXEC)
 
 clean:
-	rm tema3
+	rm $(EXEC)

@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "task1.h"
-
+#include "task2.h"
 
 int main(int argc, char *argv[])
 {
@@ -43,7 +43,28 @@ int main(int argc, char *argv[])
 		deleteGraphTr(graphTr);
 		free(tot_tr_c);
 	} else if (strcmp(argv[1], "2") == 0) {
-		// task 2
+		// Rezolvare TASK 2
+        int k, m;
+        char start_city[20];
+
+        GraphCity2 *graphCity2; // graf orase
+
+        // Citeste datele de intrare
+        fscanf(in_file, "%s %d %d", start_city, &k, &m);
+
+        // Citeste graful de orase
+        graphCity2 = readGraphCity2(in_file, 2 * m);
+
+        // Seteaza indicii oraselelor
+        setCityIds(graphCity2);
+
+        dijkstra(graphCity2, start_city, k);
+
+        // Afișează graful de orase, conform cerintei
+        printGraphCity2(out_file, graphCity2);
+
+        // Elibereaza memoria alocata dinamic pentru graf
+        deleteGraphCity2(graphCity2);
 	} else {
 		printf("Argument invalid\n");
 		return 1;
