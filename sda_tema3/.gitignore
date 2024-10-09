@@ -1,0 +1,8 @@
+run_tests.sh
+input
+output
+ref
+tema3_checkerv2.zip
+tema3*
+.idea
+rezultat_valgrind.txt
