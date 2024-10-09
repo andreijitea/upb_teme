@@ -1,0 +1,10 @@
+*.o
+
+.idea/
+Dockerfile
+assets/
+check
+checker/
+data.json
+install.sh
+local.sh
